@@ -14,9 +14,11 @@ RSpec.describe ExecutionTime do
       expect(ex_time.exec_time(task_10_times)).to be > ex_time.exec_time(task)
     end
 
-    it 'division takes more time than addition' do
+    it 'division takes more time than addition', flaky: true do
       # Doing these ops 1000 times to achieve a consistent significant time difference
-      # to mitigate false fails due to operations/results caching
+      # to mitigate false fails (flakiness) due to operations/results caching
+      # Due to these false fails and the overall non-criticality of this test
+      # it should not be run in Continuous Integration
       div = -> { 1000.times { 1.7976931348623157e+300 / -1.7976931348623156e+307 } }
       add = -> { 1000.times { 1 + 1 } }
       expect(ex_time.exec_time(div)).to be > ex_time.exec_time(add)
